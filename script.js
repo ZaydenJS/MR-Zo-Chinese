@@ -126,6 +126,55 @@ document.addEventListener("DOMContentLoaded", function () {
     btn.addEventListener("click", function () {
       modal.classList.add("active");
       document.body.style.overflow = "hidden";
+
+      // Set time input restrictions when modal opens
+      const timeInput = modal.querySelector('input[type="time"]');
+      if (timeInput) {
+        timeInput.min = "11:00";
+        timeInput.max = "21:00";
+
+        // Function to validate time range
+        function validateTimeRange(timeValue) {
+          if (!timeValue) return true; // Allow empty value
+
+          const [hours, minutes] = timeValue.split(":").map(Number);
+          const timeInMinutes = hours * 60 + minutes;
+          const minTime = 11 * 60; // 11:00 AM in minutes
+          const maxTime = 21 * 60; // 9:00 PM in minutes
+
+          return timeInMinutes >= minTime && timeInMinutes <= maxTime;
+        }
+
+        // Add validation on input change
+        timeInput.addEventListener("input", function () {
+          const isValid = validateTimeRange(this.value);
+
+          if (!isValid && this.value) {
+            this.setCustomValidity(
+              "Please select a time between 11:00 AM and 9:00 PM"
+            );
+            showNotification(
+              "Please select a time between 11:00 AM and 9:00 PM",
+              "info"
+            );
+          } else {
+            this.setCustomValidity("");
+          }
+        });
+
+        // Add validation on blur (when user leaves the field)
+        timeInput.addEventListener("blur", function () {
+          const isValid = validateTimeRange(this.value);
+
+          if (!isValid && this.value) {
+            this.value = ""; // Clear invalid time
+            showNotification(
+              "Please select a time between 11:00 AM and 9:00 PM",
+              "info"
+            );
+          }
+        });
+      }
     });
   });
 
@@ -156,6 +205,53 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // ===== FORM HANDLING =====
 document.addEventListener("DOMContentLoaded", function () {
+  // Function to validate time range (reusable)
+  function validateTimeRange(timeValue) {
+    if (!timeValue) return true; // Allow empty value
+
+    const [hours, minutes] = timeValue.split(":").map(Number);
+    const timeInMinutes = hours * 60 + minutes;
+    const minTime = 11 * 60; // 11:00 AM in minutes
+    const maxTime = 21 * 60; // 9:00 PM in minutes
+
+    return timeInMinutes >= minTime && timeInMinutes <= maxTime;
+  }
+
+  // Add time validation to all time inputs
+  const timeInputs = document.querySelectorAll('input[type="time"]');
+  timeInputs.forEach((timeInput) => {
+    timeInput.min = "11:00";
+    timeInput.max = "21:00";
+
+    timeInput.addEventListener("input", function () {
+      const isValid = validateTimeRange(this.value);
+
+      if (!isValid && this.value) {
+        this.setCustomValidity(
+          "Please select a time between 11:00 AM and 9:00 PM"
+        );
+        showNotification(
+          "Please select a time between 11:00 AM and 9:00 PM",
+          "info"
+        );
+      } else {
+        this.setCustomValidity("");
+      }
+    });
+
+    timeInput.addEventListener("blur", function () {
+      const isValid = validateTimeRange(this.value);
+
+      if (!isValid && this.value) {
+        this.value = ""; // Clear invalid time
+        showNotification(
+          "Please select a time between 11:00 AM and 9:00 PM",
+          "info"
+        );
+      }
+    });
+  });
+
   // Contact form
   const contactForm = document.getElementById("reservation-form");
   if (contactForm) {
