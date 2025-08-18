@@ -24,16 +24,8 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-// ===== LOADING SCREEN =====
-window.addEventListener("load", function () {
-  const loadingScreen = document.getElementById("loading-screen");
-  setTimeout(() => {
-    loadingScreen.classList.add("hidden");
-    setTimeout(() => {
-      loadingScreen.style.display = "none";
-    }, 500);
-  }, 1500);
-});
+// ===== REMOVE LOADING SCREEN (removed for performance) =====
+// Loading screen markup removed and this block deleted to avoid delaying FCP/LCP
 
 // ===== HEADER SCROLL EFFECT =====
 window.addEventListener("scroll", function () {
@@ -349,11 +341,11 @@ function showNotification(message, type = "info") {
   }, 5000);
 }
 
-// ===== SCROLL ANIMATIONS =====
+// ===== SCROLL ANIMATIONS + LAZY BACKGROUND IMAGES =====
 function observeElements() {
   const observerOptions = {
     threshold: 0.1,
-    rootMargin: "0px 0px -50px 0px",
+    rootMargin: "200px 0px",
   };
 
   const observer = new IntersectionObserver((entries) => {
@@ -375,9 +367,43 @@ function observeElements() {
     el.style.transition = "opacity 0.6s ease, transform 0.6s ease";
     observer.observe(el);
   });
+
+  // Lazy-load background images for elements with data-bg
+  const lazyBgObserver = new IntersectionObserver(
+    (entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const bg = el.getAttribute("data-bg");
+          if (bg) {
+            el.style.backgroundImage = `url('${bg}')`;
+          }
+          obs.unobserve(el);
+        }
+      });
+    },
+    { rootMargin: "300px 0px" }
+  );
+
+  document
+    .querySelectorAll("[data-bg]")
+    .forEach((el) => lazyBgObserver.observe(el));
+
+  // Lazy-load hero background image on desktop only; keep gradient-only on mobile for best SI
+  const hero = document.querySelector(".hero-background");
+  if (hero && window.innerWidth > 768) {
+    const src = hero.getAttribute("data-bg-desktop");
+    if (src) {
+      const img = new Image();
+      img.src = src;
+      img.onload = () => {
+        hero.style.backgroundImage = `linear-gradient(135deg, rgba(200,16,46,0.8), rgba(139,0,0,0.9)), url('${src}')`;
+      };
+    }
+  }
 }
 
-// Initialize scroll animations when DOM is loaded
+// Initialize when DOM is loaded
 document.addEventListener("DOMContentLoaded", observeElements);
 
 // ===== GALLERY LIGHTBOX =====

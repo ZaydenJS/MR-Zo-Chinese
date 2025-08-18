@@ -55,56 +55,10 @@ body {
   padding: 0 20px;
 }
 
-/* ===== LOADING SCREEN ===== */
-#loading-screen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, var(--primary-red), var(--secondary-red));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  transition: opacity 0.5s ease, visibility 0.5s ease;
-}
-
-#loading-screen.hidden {
-  opacity: 0;
-  visibility: hidden;
-}
-
-.loading-content {
-  text-align: center;
-  color: var(--white);
-}
-
-.chinese-symbol {
-  font-family: var(--font-chinese);
-  font-size: 4rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  animation: pulse 2s infinite;
-}
-
-.loading-text {
-  font-family: var(--font-primary);
-  font-size: 1.5rem;
-  font-weight: 500;
-  letter-spacing: 2px;
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.1);
-    opacity: 0.8;
-  }
+/* Defer rendering for below-the-fold sections on initial load */
+.defer-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 1000px 2000px; /* Reserve space to prevent CLS */
 }
 
 /* ===== HEADER & NAVIGATION ===== */
@@ -305,21 +259,35 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
+  /* Use a low-res placeholder gradient first; image swapped in lazily via JS */
   background: linear-gradient(
-      135deg,
-      rgba(200, 16, 46, 0.8),
-      rgba(139, 0, 0, 0.9)
-    ),
-    url("https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2074&q=80");
+    135deg,
+    rgba(200, 16, 46, 0.8),
+    rgba(139, 0, 0, 0.9)
+  );
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
 }
 
-/* Fix background attachment on mobile devices */
+/* Provide smaller background for mobile via media query as a fallback */
 @media (max-width: 768px) {
   .hero-background {
     background-attachment: scroll;
+  }
+}
+
+/* Desktop: keep original fixed background behavior and image */
+@media (min-width: 769px) {
+  .hero-background {
+    background: linear-gradient(
+        135deg,
+        rgba(200, 16, 46, 0.8),
+        rgba(139, 0, 0, 0.9)
+      ),
+      url("https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2074&q=80");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
   }
 }
 
@@ -704,7 +672,7 @@ section {
 .restaurant-image {
   width: 100%;
   height: 400px;
-  background: url("https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80");
+  /* lazy-loaded via JS */
   background-size: cover;
   background-position: center;
 }
@@ -915,24 +883,12 @@ section {
   height: 400px;
 }
 
-.restaurant-interior {
-  background-image: url("https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80");
-}
-
-.dish-1 {
-  background-image: url("https://images.unsplash.com/photo-1559847844-5315695dadae?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80");
-}
-
-.dish-2 {
-  background-image: url("https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80");
-}
-
-.dish-3 {
-  background-image: url("https://images.unsplash.com/photo-1496116218417-1a781b1c416c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80");
-}
-
+.restaurant-interior,
+.dish-1,
+.dish-2,
+.dish-3,
 .dish-4 {
-  background-image: url("https://images.unsplash.com/photo-1603133872878-684f208fb84b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80");
+  /* background images are set lazily via JS */
 }
 
 .gallery-item:hover .gallery-image {
@@ -1722,9 +1678,9 @@ section {
     left: 0;
     width: 100%;
     background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(10px);
+    /* Performance: remove heavy blur on mobile */
     border-top: 1px solid rgba(200, 16, 46, 0.1);
-    box-shadow: var(--shadow-medium);
+    box-shadow: none;
     transform: translateY(-100%);
     opacity: 0;
     visibility: hidden;
@@ -1770,6 +1726,24 @@ section {
 
   .nav-link::after {
     display: none;
+  }
+
+  /* Mobile performance tuning */
+  .header {
+    backdrop-filter: none;
+  }
+  .btn,
+  .phone-btn,
+  .reservation-btn {
+    box-shadow: none;
+  }
+  .gallery-item,
+  .review-card,
+  .image-frame {
+    box-shadow: none;
+  }
+  .nav-menu {
+    backdrop-filter: none;
   }
 
   .nav-actions {
@@ -2251,6 +2225,16 @@ section {
   }
 }
 
+/* Extra mobile-only performance cuts for very small devices */
+@media (max-width: 480px) {
+  .hero-badge {
+    backdrop-filter: none;
+  }
+  .btn::before {
+    display: none;
+  }
+}
+
 /* ===== EXTRA SMALL MOBILE DEVICES ===== */
 @media (max-width: 360px) {
   .container {
@@ -2510,6 +2494,27 @@ section {
   .stat-item {
     padding: clamp(1.25rem, 4vw, 1.75rem);
     border-radius: 14px;
+  }
+}
+
+/* Mobile-only performance overrides to push Speed Index < 3s */
+@media (max-width: 768px) {
+  .hero-content {
+    animation: none !important;
+  }
+  .btn,
+  .btn-primary,
+  .btn-secondary {
+    transition: none;
+  }
+  .btn-secondary {
+    backdrop-filter: none;
+  }
+  .hero-badge {
+    backdrop-filter: none;
+  }
+  .scroll-indicator {
+    display: none;
   }
 }
 

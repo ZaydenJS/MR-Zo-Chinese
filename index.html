@@ -13,24 +13,40 @@
     <link rel="stylesheet" href="styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Load Google Fonts on desktop only to maximize mobile performance -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600&family=Noto+Serif+SC:wght@600&display=swap"
       rel="stylesheet"
+      media="(min-width: 769px)"
     />
+    <!-- Load Font Awesome asynchronously to avoid render-blocking -->
     <link
-      rel="stylesheet"
+      rel="preload"
+      as="style"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      onload="this.rel='stylesheet'"
     />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      />
+    </noscript>
+    <!-- Preload hero image for faster LCP on mobile -->
+    <link
+      rel="preload"
+      as="image"
+      href="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=700&q=55"
+      imagesrcset="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=480&q=55 480w, https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=700&q=55 700w, https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=60 1200w"
+      media="(max-width: 768px)"
+      fetchpriority="high"
+      importance="high"
+    />
+    <!-- Performance preconnects -->
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
   </head>
   <body>
-    <!-- Loading Screen -->
-    <div id="loading-screen">
-      <div class="loading-content">
-        <div class="chinese-symbol">福</div>
-        <div class="loading-text">Mr Zo Chinese Restaurant</div>
-      </div>
-    </div>
-
     <!-- Navigation -->
     <header class="header">
       <div class="nav-container">
@@ -72,7 +88,11 @@
 
     <!-- Hero Section -->
     <section id="home" class="hero">
-      <div class="hero-background">
+      <div
+        class="hero-background"
+        data-bg-mobile="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=640&q=55"
+        data-bg-desktop="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2074&q=80"
+      >
         <div class="hero-overlay"></div>
       </div>
       <div class="hero-content">
@@ -180,7 +200,10 @@
           <div class="about-image">
             <div class="image-container">
               <div class="image-frame">
-                <div class="restaurant-image"></div>
+                <div
+                  class="restaurant-image"
+                  data-bg="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=60"
+                ></div>
               </div>
               <div class="image-decoration"></div>
             </div>
@@ -190,7 +213,7 @@
     </section>
 
     <!-- Menu Section -->
-    <section id="menu" class="menu-section">
+    <section id="menu" class="menu-section defer-section">
       <div class="container">
         <div class="section-header">
           <div class="section-badge">Our Menu</div>
@@ -342,7 +365,7 @@
     </section>
 
     <!-- Gallery Section -->
-    <section id="gallery" class="gallery-section">
+    <section id="gallery" class="gallery-section defer-section">
       <div class="container">
         <div class="section-header">
           <div class="section-badge">Gallery</div>
@@ -354,35 +377,50 @@
 
         <div class="gallery-grid">
           <div class="gallery-item large">
-            <div class="gallery-image restaurant-interior"></div>
+            <div
+              class="gallery-image restaurant-interior"
+              data-bg="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=60"
+            ></div>
             <div class="gallery-overlay">
               <h4>Restaurant Interior</h4>
               <p>Elegant dining atmosphere</p>
             </div>
           </div>
           <div class="gallery-item">
-            <div class="gallery-image dish-1"></div>
+            <div
+              class="gallery-image dish-1"
+              data-bg="https://images.unsplash.com/photo-1559847844-5315695dadae?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=60"
+            ></div>
             <div class="gallery-overlay">
               <h4>Sweet & Sour Pork</h4>
               <p>Our signature dish</p>
             </div>
           </div>
           <div class="gallery-item">
-            <div class="gallery-image dish-2"></div>
+            <div
+              class="gallery-image dish-2"
+              data-bg="https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=60"
+            ></div>
             <div class="gallery-overlay">
               <h4>Kung Pao Chicken</h4>
               <p>Traditional Sichuan flavors</p>
             </div>
           </div>
           <div class="gallery-item">
-            <div class="gallery-image dish-3"></div>
+            <div
+              class="gallery-image dish-3"
+              data-bg="https://images.unsplash.com/photo-1496116218417-1a781b1c416c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=60"
+            ></div>
             <div class="gallery-overlay">
               <h4>Prawn Dumplings</h4>
               <p>Delicate and fresh</p>
             </div>
           </div>
           <div class="gallery-item">
-            <div class="gallery-image dish-4"></div>
+            <div
+              class="gallery-image dish-4"
+              data-bg="https://images.unsplash.com/photo-1603133872878-684f208fb84b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=60"
+            ></div>
             <div class="gallery-overlay">
               <h4>Yang Chow Fried Rice</h4>
               <p>Classic comfort food</p>
@@ -393,7 +431,7 @@
     </section>
 
     <!-- Reviews Section -->
-    <section id="reviews" class="reviews-section">
+    <section id="reviews" class="reviews-section defer-section">
       <div class="container">
         <div class="section-header">
           <div class="section-badge">Reviews</div>
@@ -501,7 +539,7 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="contact-section">
+    <section id="contact" class="contact-section defer-section">
       <div class="container">
         <div class="section-header">
           <div class="section-badge">Contact</div>
