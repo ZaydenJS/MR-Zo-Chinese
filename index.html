@@ -10,7 +10,157 @@
       name="description"
       content="Experience authentic Chinese cuisine at Mr Zo Chinese Restaurant in Wilton. 4.9-star rated restaurant serving traditional dishes with modern presentation."
     />
-    <link rel="stylesheet" href="styles.css" />
+    <!-- Inline critical CSS for above-the-fold (mobile-first) -->
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.95);
+        border-bottom: 1px solid rgba(200, 16, 46, 0.1);
+        z-index: 1000;
+      }
+      .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 16px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .nav-actions .phone-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: linear-gradient(135deg, #c8102e, #8b0000);
+        color: #fff;
+        padding: 10px 14px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding-top: 80px;
+        position: relative;
+        color: #fff;
+        text-align: center;
+        overflow: hidden;
+      }
+      .hero-background {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(200, 16, 46, 0.8),
+          rgba(139, 0, 0, 0.9)
+        );
+        background-size: cover;
+        background-position: center;
+      }
+      .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          circle at center,
+          rgba(0, 0, 0, 0.3) 0%,
+          rgba(0, 0, 0, 0.6) 100%
+        );
+      }
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        padding: 0 16px 15vh;
+      }
+      .hero-badge {
+        display: inline-flex;
+        gap: 0.5rem;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 215, 0, 0.3);
+        padding: 6px 12px;
+        border-radius: 50px;
+        margin-bottom: 1rem;
+      }
+      .hero-title {
+        margin: 0 0 1rem;
+      }
+      .title-main {
+        display: block;
+        font-size: 2.8rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #fff, #ffd700);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .title-sub {
+        display: block;
+        font-size: 1.8rem;
+        color: #fff8dc;
+        font-style: italic;
+      }
+      .hero-description {
+        max-width: 600px;
+        margin: 0 auto 1.5rem;
+        color: rgba(255, 255, 255, 0.9);
+      }
+      .hero-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 12px 20px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, #c8102e, #8b0000);
+        color: #fff;
+      }
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+      }
+    </style>
+    <!-- Load main stylesheet asynchronously -->
+    <link
+      rel="preload"
+      as="style"
+      href="styles.css"
+      onload="this.rel='stylesheet'"
+    />
+    <noscript><link rel="stylesheet" href="styles.css" /></noscript>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!-- Load Google Fonts on desktop only to maximize mobile performance -->
@@ -777,6 +927,6 @@
       </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
   </body>
 </html>
