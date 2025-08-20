@@ -41,7 +41,7 @@
 html {
   scroll-behavior: smooth;
   /* Ensure the entire viewport (including status bar area) matches header color */
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: #fff8dc;
 }
 
 body {
@@ -50,10 +50,7 @@ body {
   color: var(--black);
   overflow-x: hidden;
   /* Match the header background exactly */
-  background-color: rgba(255, 255, 255, 0.95);
-  /* Ensure content fills viewport even when zoomed */
-  min-width: 100vw;
-  width: 100%;
+  background-color: #fff8dc;
 }
 
 .container {
@@ -73,8 +70,8 @@ body {
   position: fixed;
   top: 0;
   left: 0;
+  right: 0;
   width: 100%;
-  min-width: 100vw;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(200, 16, 46, 0.1);
@@ -254,8 +251,6 @@ body {
 /* ===== HERO SECTION ===== */
 .hero {
   height: 100vh;
-  min-width: 100vw;
-  width: 100%;
   position: relative;
   display: flex;
   align-items: center;
