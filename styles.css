@@ -72,6 +72,8 @@ body {
   border-bottom: 1px solid rgba(200, 16, 46, 0.1);
   z-index: 1000;
   transition: all var(--transition-fast);
+  /* Fill iOS notch/safe-area with the same header color */
+  padding-top: env(safe-area-inset-top);
 }
 
 .header.scrolled {
