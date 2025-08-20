@@ -40,6 +40,8 @@
 
 html {
   scroll-behavior: smooth;
+  /* Ensure the entire viewport (including status bar area) matches header color */
+  background-color: rgba(255, 255, 255, 0.95);
 }
 
 body {
@@ -47,6 +49,8 @@ body {
   line-height: 1.6;
   color: var(--black);
   overflow-x: hidden;
+  /* Match the header background exactly */
+  background-color: rgba(255, 255, 255, 0.95);
 }
 
 .container {
