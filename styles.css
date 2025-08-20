@@ -71,7 +71,7 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  width: 100%;
+  width: 100vw;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(200, 16, 46, 0.1);
@@ -251,6 +251,7 @@ body {
 /* ===== HERO SECTION ===== */
 .hero {
   height: 100vh;
+  width: 100vw;
   position: relative;
   display: flex;
   align-items: center;
@@ -264,8 +265,7 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  min-width: 100vw;
+  width: 100vw;
   height: 100%;
   /* Use a low-res placeholder gradient first; image swapped in lazily via JS */
   background: linear-gradient(
@@ -537,8 +537,7 @@ body {
 section {
   padding: var(--section-padding);
   position: relative;
-  width: 100%;
-  min-width: 100vw;
+  width: 100vw;
 }
 
 .section-header {
