@@ -1062,6 +1062,9 @@ section {
 .contact-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "call call"
+    "list list";
   gap: 4rem;
   align-items: flex-start;
 }
@@ -1069,6 +1072,8 @@ section {
 .contact-info {
   display: grid;
   gap: 2rem;
+  grid-template-columns: 1fr 1fr;
+  grid-area: list;
 }
 
 .info-card {
@@ -1077,6 +1082,10 @@ section {
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-light);
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   gap: 1.5rem;
   transition: transform var(--transition-fast);
 }
@@ -1131,7 +1140,7 @@ section {
 .hours-item {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.25rem;
   font-size: 0.95rem;
 }
@@ -1146,6 +1155,7 @@ section {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+  justify-content: center;
 }
 
 .service-tag {
@@ -1218,6 +1228,38 @@ section {
   display: block;
   margin: 1.5rem auto 0;
   width: fit-content;
+}
+
+/* Book-to-Call card inherits info-card styling and aligns with the list */
+.call-card {
+  grid-area: call;
+  text-align: center;
+  width: min(100%, 900px);
+  justify-self: center;
+  margin: 0 auto;
+}
+.call-card .btn {
+  margin-top: 0.75rem;
+  width: auto;
+  max-width: none;
+  white-space: nowrap;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Mobile: stack with same spacing/gutters as other info cards */
+@media (max-width: 1024px) {
+  .call-card {
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .call-card .btn {
+    width: auto;
+    max-width: none;
+    white-space: nowrap;
+  }
 }
 
 /* ===== FOOTER ===== */
@@ -1641,6 +1683,15 @@ section {
     text-align: center;
   }
 
+  /* Ensure Book-to-Call sits first on mobile/tablet and spans full width */
+  .call-card {
+    grid-row: 1;
+    justify-self: stretch;
+  }
+  .contact-info {
+    grid-row: 2;
+  }
+
   .section-header {
     text-align: center;
   }
@@ -1653,11 +1704,21 @@ section {
     font-size: 2rem;
   }
 
-  .about-content,
-  .contact-content {
+  .about-content {
     grid-template-columns: 1fr;
     gap: 3rem;
     text-align: center;
+  }
+  .contact-content {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "call"
+      "list";
+    gap: 3rem;
+    text-align: center;
+  }
+  .contact-info {
+    grid-template-columns: 1fr;
   }
 
   .footer-content {

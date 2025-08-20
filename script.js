@@ -37,21 +37,34 @@ window.addEventListener("scroll", function () {
   }
 });
 
-// ===== SMOOTH SCROLLING =====
+// ===== SMOOTH SCROLLING (accounts for sticky header and mobile menu) =====
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener("click", function (e) {
-    e.preventDefault();
     const targetId = this.getAttribute("href");
     const targetElement = document.querySelector(targetId);
+    if (!targetElement) return;
 
-    if (targetElement) {
-      const headerHeight = document.querySelector(".header").offsetHeight;
-      const targetPosition = targetElement.offsetTop - headerHeight;
+    e.preventDefault();
 
-      window.scrollTo({
-        top: targetPosition,
-        behavior: "smooth",
-      });
+    const header = document.querySelector(".header");
+    const headerHeight = header ? header.offsetHeight : 0;
+
+    const scrollToTarget = () => {
+      const rect = targetElement.getBoundingClientRect();
+      const targetTop = window.pageYOffset + rect.top - headerHeight - 6; // small comfort offset
+      window.scrollTo({ top: targetTop, behavior: "smooth" });
+    };
+
+    // If mobile menu is open, close it first then scroll after transition
+    const navMenu = document.querySelector(".nav-menu");
+    const mobileToggle = document.querySelector(".mobile-menu-toggle");
+    if (navMenu && navMenu.classList.contains("active")) {
+      navMenu.classList.remove("active");
+      if (mobileToggle) mobileToggle.classList.remove("active");
+      document.body.style.overflow = "";
+      setTimeout(scrollToTarget, 280); // align with CSS transition speed
+    } else {
+      scrollToTarget();
     }
   });
 });
@@ -107,187 +120,8 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-// ===== RESERVATION MODAL =====
-document.addEventListener("DOMContentLoaded", function () {
-  const reservationBtns = document.querySelectorAll(".reservation-btn");
-  const modal = document.getElementById("reservation-modal");
-  const modalClose = document.querySelector(".modal-close");
-
-  // Open modal
-  reservationBtns.forEach((btn) => {
-    btn.addEventListener("click", function () {
-      modal.classList.add("active");
-      document.body.style.overflow = "hidden";
-
-      // Set time input restrictions when modal opens
-      const timeInput = modal.querySelector('input[type="time"]');
-      if (timeInput) {
-        timeInput.min = "11:00";
-        timeInput.max = "21:00";
-
-        // Function to validate time range
-        function validateTimeRange(timeValue) {
-          if (!timeValue) return true; // Allow empty value
-
-          const [hours, minutes] = timeValue.split(":").map(Number);
-          const timeInMinutes = hours * 60 + minutes;
-          const minTime = 11 * 60; // 11:00 AM in minutes
-          const maxTime = 21 * 60; // 9:00 PM in minutes
-
-          return timeInMinutes >= minTime && timeInMinutes <= maxTime;
-        }
-
-        // Add validation on input change
-        timeInput.addEventListener("input", function () {
-          const isValid = validateTimeRange(this.value);
-
-          if (!isValid && this.value) {
-            this.setCustomValidity(
-              "Please select a time between 11:00 AM and 9:00 PM"
-            );
-            showNotification(
-              "Please select a time between 11:00 AM and 9:00 PM",
-              "info"
-            );
-          } else {
-            this.setCustomValidity("");
-          }
-        });
-
-        // Add validation on blur (when user leaves the field)
-        timeInput.addEventListener("blur", function () {
-          const isValid = validateTimeRange(this.value);
-
-          if (!isValid && this.value) {
-            this.value = ""; // Clear invalid time
-            showNotification(
-              "Please select a time between 11:00 AM and 9:00 PM",
-              "info"
-            );
-          }
-        });
-      }
-    });
-  });
-
-  // Close modal
-  function closeModal() {
-    modal.classList.remove("active");
-    document.body.style.overflow = "";
-  }
-
-  if (modalClose) {
-    modalClose.addEventListener("click", closeModal);
-  }
-
-  // Close modal when clicking outside
-  modal.addEventListener("click", function (e) {
-    if (e.target === modal) {
-      closeModal();
-    }
-  });
-
-  // Close modal with Escape key
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && modal.classList.contains("active")) {
-      closeModal();
-    }
-  });
-});
-
-// ===== FORM HANDLING =====
-document.addEventListener("DOMContentLoaded", function () {
-  // Function to validate time range (reusable)
-  function validateTimeRange(timeValue) {
-    if (!timeValue) return true; // Allow empty value
-
-    const [hours, minutes] = timeValue.split(":").map(Number);
-    const timeInMinutes = hours * 60 + minutes;
-    const minTime = 11 * 60; // 11:00 AM in minutes
-    const maxTime = 21 * 60; // 9:00 PM in minutes
-
-    return timeInMinutes >= minTime && timeInMinutes <= maxTime;
-  }
-
-  // Add time validation to all time inputs
-  const timeInputs = document.querySelectorAll('input[type="time"]');
-  timeInputs.forEach((timeInput) => {
-    timeInput.min = "11:00";
-    timeInput.max = "21:00";
-
-    timeInput.addEventListener("input", function () {
-      const isValid = validateTimeRange(this.value);
-
-      if (!isValid && this.value) {
-        this.setCustomValidity(
-          "Please select a time between 11:00 AM and 9:00 PM"
-        );
-        showNotification(
-          "Please select a time between 11:00 AM and 9:00 PM",
-          "info"
-        );
-      } else {
-        this.setCustomValidity("");
-      }
-    });
-
-    timeInput.addEventListener("blur", function () {
-      const isValid = validateTimeRange(this.value);
-
-      if (!isValid && this.value) {
-        this.value = ""; // Clear invalid time
-        showNotification(
-          "Please select a time between 11:00 AM and 9:00 PM",
-          "info"
-        );
-      }
-    });
-  });
-
-  // Contact form
-  const contactForm = document.getElementById("reservation-form");
-  if (contactForm) {
-    contactForm.addEventListener("submit", function (e) {
-      e.preventDefault();
-
-      // Get form data
-      const formData = new FormData(contactForm);
-      const data = Object.fromEntries(formData);
-
-      // Simulate form submission
-      showNotification(
-        "Thank you for your reservation request! We will contact you shortly to confirm.",
-        "success"
-      );
-      contactForm.reset();
-    });
-  }
-
-  // Modal form
-  const modalForm = document.getElementById("modal-reservation-form");
-  if (modalForm) {
-    modalForm.addEventListener("submit", function (e) {
-      e.preventDefault();
-
-      // Get form data
-      const formData = new FormData(modalForm);
-      const data = Object.fromEntries(formData);
-
-      // Simulate form submission
-      showNotification(
-        "Thank you for your reservation request! We will contact you shortly to confirm.",
-        "success"
-      );
-      modalForm.reset();
-
-      // Close modal
-      const modal = document.getElementById("reservation-modal");
-      modal.classList.remove("active");
-      document.body.style.overflow = "";
-    });
-  }
-});
-
+// (Reservation modal removed as bookings are by phone call)
+// (Reservation forms removed)
 // ===== NOTIFICATION SYSTEM =====
 function showNotification(message, type = "info") {
   // Remove existing notifications
