@@ -1749,9 +1749,9 @@ section {
     top: 80px;
     left: 0;
     width: 100%;
-    background: var(--white);
+    background: #ffffff;
     /* Performance: remove heavy blur on mobile */
-    border-top: 1px solid rgba(200, 16, 46, 0.1);
+    border-top: none;
     box-shadow: none;
     transform: translateY(-100%);
     opacity: 0;
@@ -1857,13 +1857,13 @@ section {
     min-height: 100vh;
     padding-top: 80px;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: center;
     box-sizing: border-box;
   }
 
   .hero-content {
-    padding-bottom: 15vh;
+    padding-bottom: 0;
   }
 
   .hero-content {
@@ -2047,13 +2047,13 @@ section {
     min-height: 100vh;
     padding-top: 70px;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: center;
     box-sizing: border-box;
   }
 
   .hero-content {
-    padding-bottom: 12vh;
+    padding-bottom: 0;
   }
 
   .hero-content {
@@ -2348,13 +2348,13 @@ section {
     min-height: 100vh;
     padding-top: 65px;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: center;
     box-sizing: border-box;
   }
 
   .hero-content {
-    padding-bottom: 10vh;
+    padding-bottom: 0;
   }
 
   .hero-content {
