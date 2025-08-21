@@ -1761,21 +1761,13 @@ section {
     );
   }
 
-  /* Update header safe-area to match hero background */
+  /* Keep header white */
   .header {
-    background: linear-gradient(
-      135deg,
-      rgba(200, 16, 46, 0.8),
-      rgba(139, 0, 0, 0.9)
-    );
+    background: var(--white);
   }
 
   .header.scrolled {
-    background: linear-gradient(
-      135deg,
-      rgba(200, 16, 46, 0.8),
-      rgba(139, 0, 0, 0.9)
-    );
+    background: var(--white);
   }
   .nav-menu {
     position: fixed;
