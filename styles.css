@@ -1744,6 +1744,39 @@ section {
 }
 
 @media (max-width: 768px) {
+  /* Make status bar area match hero background */
+  html {
+    background: linear-gradient(
+      135deg,
+      rgba(200, 16, 46, 0.8),
+      rgba(139, 0, 0, 0.9)
+    );
+  }
+
+  body {
+    background: linear-gradient(
+      135deg,
+      rgba(200, 16, 46, 0.8),
+      rgba(139, 0, 0, 0.9)
+    );
+  }
+
+  /* Update header safe-area to match hero background */
+  .header {
+    background: linear-gradient(
+      135deg,
+      rgba(200, 16, 46, 0.8),
+      rgba(139, 0, 0, 0.9)
+    );
+  }
+
+  .header.scrolled {
+    background: linear-gradient(
+      135deg,
+      rgba(200, 16, 46, 0.8),
+      rgba(139, 0, 0, 0.9)
+    );
+  }
   .nav-menu {
     position: fixed;
     top: 80px;
