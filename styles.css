@@ -41,7 +41,7 @@
 html {
   scroll-behavior: smooth;
   /* Ensure the entire viewport (including status bar area) matches header color */
-  background-color: #fff8dc;
+  background-color: var(--white);
   /* Prevent horizontal overflow on zoom */
   overflow-x: hidden;
 }
@@ -52,7 +52,7 @@ body {
   color: var(--black);
   overflow-x: hidden;
   /* Match the header background exactly */
-  background-color: #fff8dc;
+  background-color: var(--white);
   /* Prevent zoom-out white line on mobile */
   min-width: 320px;
   position: relative;
@@ -76,7 +76,7 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  background: var(--cream);
+  background: var(--white);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(200, 16, 46, 0.1);
   z-index: 1000;
@@ -86,7 +86,7 @@ body {
 }
 
 .header.scrolled {
-  background: var(--cream);
+  background: var(--white);
   box-shadow: var(--shadow-medium);
 }
 
@@ -1749,7 +1749,7 @@ section {
     top: 80px;
     left: 0;
     width: 100%;
-    background: rgba(255, 255, 255, 0.98);
+    background: var(--white);
     /* Performance: remove heavy blur on mobile */
     border-top: 1px solid rgba(200, 16, 46, 0.1);
     box-shadow: none;
