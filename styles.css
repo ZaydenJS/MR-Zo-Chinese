@@ -1396,6 +1396,12 @@ section {
   width: 16px;
 }
 
+.contact-item span,
+.contact-item a {
+  color: rgba(255, 255, 255, 0.8) !important;
+  text-decoration: none;
+}
+
 .social-links {
   display: flex;
   gap: 1rem;
