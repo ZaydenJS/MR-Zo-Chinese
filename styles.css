@@ -1131,6 +1131,12 @@ section {
   margin-bottom: 0.5rem;
 }
 
+.info-content p,
+.info-content p a {
+  color: var(--dark-gray) !important;
+  text-decoration: none;
+}
+
 .info-link {
   color: var(--primary-red);
   text-decoration: none;
