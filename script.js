@@ -247,7 +247,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // Build an array of image sources from the gallery items
   const images = Array.from(galleryItems).map((item) => {
     const el = item.querySelector(".gallery-image");
-    return getComputedStyle(el).backgroundImage;
+    const dataBg = el.getAttribute("data-bg");
+    return dataBg ? `url('${dataBg}')` : getComputedStyle(el).backgroundImage;
   });
 
   function openLightbox(index) {
@@ -366,6 +367,12 @@ document.addEventListener("DOMContentLoaded", function () {
   // Attach click handlers to open with correct index
   galleryItems.forEach((item, idx) => {
     item.addEventListener("click", function () {
+      // Ensure the background image is loaded immediately when clicked
+      const imageElement = item.querySelector(".gallery-image");
+      const dataBg = imageElement.getAttribute("data-bg");
+      if (dataBg && !imageElement.style.backgroundImage) {
+        imageElement.style.backgroundImage = `url('${dataBg}')`;
+      }
       openLightbox(idx);
     });
   });
