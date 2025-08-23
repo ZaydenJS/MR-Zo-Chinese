@@ -2014,8 +2014,22 @@ section {
 
   .category-header {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 1rem;
+    text-align: center;
+  }
+
+  .category-header h3 {
+    text-align: center;
+  }
+
+  .item-content h4 {
+    text-align: center;
+    justify-content: center;
+  }
+
+  .item-content p {
+    text-align: center;
   }
 
   .menu-footer {
@@ -2199,8 +2213,27 @@ section {
 
   .menu-item {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 0.5rem;
+    text-align: center;
+  }
+
+  .category-header {
+    align-items: center;
+    text-align: center;
+  }
+
+  .category-header h3 {
+    text-align: center;
+  }
+
+  .item-content h4 {
+    text-align: center;
+    justify-content: center;
+  }
+
+  .item-content p {
+    text-align: center;
   }
 
   .item-price {
