@@ -202,7 +202,7 @@ function observeElements() {
     observer.observe(el);
   });
 
-  // Lazy-load background images for elements with data-bg
+  // Aggressive loading for instant display - load images immediately when they're close to viewport
   const lazyBgObserver = new IntersectionObserver(
     (entries, obs) => {
       entries.forEach((entry) => {
@@ -210,18 +210,42 @@ function observeElements() {
           const el = entry.target;
           const bg = el.getAttribute("data-bg");
           if (bg) {
-            el.style.backgroundImage = `url('${bg}')`;
+            // Preload image for instant display
+            const img = new Image();
+            img.onload = () => {
+              el.style.backgroundImage = `url('${bg}')`;
+            };
+            img.src = bg;
           }
           obs.unobserve(el);
         }
       });
     },
-    { rootMargin: "300px 0px" }
+    { rootMargin: "800px 0px", threshold: 0 }
   );
 
-  document
-    .querySelectorAll("[data-bg]")
-    .forEach((el) => lazyBgObserver.observe(el));
+  // Load critical above-the-fold images immediately
+  const criticalImages = document.querySelectorAll(
+    ".gallery-item:nth-child(-n+2) [data-bg]"
+  );
+  criticalImages.forEach((el) => {
+    const bg = el.getAttribute("data-bg");
+    if (bg) {
+      const img = new Image();
+      img.onload = () => {
+        el.style.backgroundImage = `url('${bg}')`;
+      };
+      img.src = bg;
+    }
+  });
+
+  // Observe remaining images for lazy loading
+  document.querySelectorAll("[data-bg]").forEach((el) => {
+    // Skip critical images that are already loaded
+    if (!el.closest(".gallery-item:nth-child(-n+2)")) {
+      lazyBgObserver.observe(el);
+    }
+  });
 
   // Lazy-load hero background image on desktop only; keep gradient-only on mobile for best SI
   const hero = document.querySelector(".hero-background");
@@ -237,8 +261,27 @@ function observeElements() {
   }
 }
 
+// Preload all gallery images for instant loading
+function preloadAllImages() {
+  const allImages = [
+    "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1559847844-5315695dadae?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1603133872878-684f208fb84b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+  ];
+
+  allImages.forEach((src) => {
+    const img = new Image();
+    img.src = src;
+  });
+}
+
 // Initialize when DOM is loaded
-document.addEventListener("DOMContentLoaded", observeElements);
+document.addEventListener("DOMContentLoaded", () => {
+  observeElements();
+  preloadAllImages();
+});
 
 // ===== SCROLL TO TOP BUTTON =====
 document.addEventListener("DOMContentLoaded", function () {

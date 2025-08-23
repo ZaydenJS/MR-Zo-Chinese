@@ -70,6 +70,15 @@ body {
   contain-intrinsic-size: 1000px 2000px; /* Reserve space to prevent CLS */
 }
 
+/* Optimize image loading and rendering */
+.gallery-image {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  will-change: background-image;
+  transform: translateZ(0); /* Force hardware acceleration */
+}
+
 /* ===== HEADER & NAVIGATION ===== */
 .header {
   position: fixed;
