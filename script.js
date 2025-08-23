@@ -202,33 +202,60 @@ function observeElements() {
     observer.observe(el);
   });
 
-  // Aggressive loading for instant display - load images immediately when they're close to viewport
-  const lazyBgObserver = new IntersectionObserver(
-    (entries, obs) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const el = entry.target;
-          const bg = el.getAttribute("data-bg");
-          if (bg) {
-            // Preload image for instant display
-            const img = new Image();
-            img.onload = () => {
-              el.style.backgroundImage = `url('${bg}')`;
-            };
-            img.src = bg;
-          }
-          obs.unobserve(el);
-        }
-      });
-    },
-    { rootMargin: "800px 0px", threshold: 0 }
-  );
+  // No lazy loading - all images load instantly via loadCriticalImages() function
 
-  // Load critical above-the-fold images immediately
-  const criticalImages = document.querySelectorAll(
-    ".gallery-item:nth-child(-n+2) [data-bg]"
-  );
-  criticalImages.forEach((el) => {
+  // Hero background now loaded instantly via loadCriticalImages() function
+}
+
+// Preload ALL images for instant loading across the entire site
+function preloadAllImages() {
+  const allImages = [
+    // Hero background images
+    "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=640&q=55",
+    "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2074&q=80",
+    // About section restaurant image
+    "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=60",
+    // Gallery images
+    "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1559847844-5315695dadae?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+    "https://images.unsplash.com/photo-1603133872878-684f208fb84b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+  ];
+
+  // Preload with high priority for instant display
+  allImages.forEach((src) => {
+    const img = new Image();
+    img.loading = "eager";
+    img.fetchPriority = "high";
+    img.src = src;
+  });
+}
+
+// Load critical images immediately (no lazy loading)
+function loadCriticalImages() {
+  // Load hero background immediately
+  const hero = document.querySelector(".hero-background");
+  if (hero) {
+    const mobileBg = hero.getAttribute("data-bg-mobile");
+    const desktopBg = hero.getAttribute("data-bg-desktop");
+    const bgToUse = window.innerWidth <= 768 ? mobileBg : desktopBg;
+
+    if (bgToUse) {
+      const img = new Image();
+      img.onload = () => {
+        if (window.innerWidth <= 768) {
+          hero.style.backgroundImage = `linear-gradient(135deg, rgba(200,16,46,0.8), rgba(139,0,0,0.9)), url('${mobileBg}')`;
+        } else {
+          hero.style.backgroundImage = `linear-gradient(135deg, rgba(200,16,46,0.8), rgba(139,0,0,0.9)), url('${desktopBg}')`;
+        }
+      };
+      img.src = bgToUse;
+    }
+  }
+
+  // Load all data-bg images immediately
+  document.querySelectorAll("[data-bg]").forEach((el) => {
     const bg = el.getAttribute("data-bg");
     if (bg) {
       const img = new Image();
@@ -238,49 +265,13 @@ function observeElements() {
       img.src = bg;
     }
   });
-
-  // Observe remaining images for lazy loading
-  document.querySelectorAll("[data-bg]").forEach((el) => {
-    // Skip critical images that are already loaded
-    if (!el.closest(".gallery-item:nth-child(-n+2)")) {
-      lazyBgObserver.observe(el);
-    }
-  });
-
-  // Lazy-load hero background image on desktop only; keep gradient-only on mobile for best SI
-  const hero = document.querySelector(".hero-background");
-  if (hero && window.innerWidth > 768) {
-    const src = hero.getAttribute("data-bg-desktop");
-    if (src) {
-      const img = new Image();
-      img.src = src;
-      img.onload = () => {
-        hero.style.backgroundImage = `linear-gradient(135deg, rgba(200,16,46,0.8), rgba(139,0,0,0.9)), url('${src}')`;
-      };
-    }
-  }
-}
-
-// Preload all gallery images for instant loading
-function preloadAllImages() {
-  const allImages = [
-    "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-    "https://images.unsplash.com/photo-1559847844-5315695dadae?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1603133872878-684f208fb84b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-  ];
-
-  allImages.forEach((src) => {
-    const img = new Image();
-    img.src = src;
-  });
 }
 
 // Initialize when DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
-  observeElements();
-  preloadAllImages();
+  loadCriticalImages(); // Load critical images first for instant display
+  preloadAllImages(); // Preload all images in background
+  observeElements(); // Set up observers for animations
 });
 
 // ===== SCROLL TO TOP BUTTON =====

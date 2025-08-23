@@ -70,13 +70,25 @@ body {
   contain-intrinsic-size: 1000px 2000px; /* Reserve space to prevent CLS */
 }
 
-/* Optimize image loading and rendering */
-.gallery-image {
+/* Optimize ALL images for instant loading and rendering */
+.gallery-image,
+.restaurant-image,
+.hero-background {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   will-change: background-image;
   transform: translateZ(0); /* Force hardware acceleration */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* Ensure images are ready for instant display */
+[data-bg] {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transform: translateZ(0);
 }
 
 /* ===== HEADER & NAVIGATION ===== */
@@ -2247,7 +2259,9 @@ section {
 
   .item-price {
     margin-left: 0;
-    align-self: flex-end;
+    align-self: center;
+    text-align: center;
+    width: 100%;
   }
 
   .menu-footer {
