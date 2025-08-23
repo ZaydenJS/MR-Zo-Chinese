@@ -240,6 +240,36 @@ function observeElements() {
 // Initialize when DOM is loaded
 document.addEventListener("DOMContentLoaded", observeElements);
 
+// ===== SCROLL TO TOP BUTTON =====
+document.addEventListener("DOMContentLoaded", function () {
+  const scrollToTopBtn = document.getElementById("scroll-to-top");
+  const scrollThreshold = 300; // Show button after scrolling 300px
+
+  // Show/hide button based on scroll position
+  function toggleScrollButton() {
+    if (window.pageYOffset > scrollThreshold) {
+      scrollToTopBtn.classList.add("visible");
+    } else {
+      scrollToTopBtn.classList.remove("visible");
+    }
+  }
+
+  // Smooth scroll to top
+  function scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
+
+  // Event listeners
+  window.addEventListener("scroll", toggleScrollButton);
+  scrollToTopBtn.addEventListener("click", scrollToTop);
+
+  // Initial check
+  toggleScrollButton();
+});
+
 // ===== GALLERY LIGHTBOX =====
 document.addEventListener("DOMContentLoaded", function () {
   const galleryItems = document.querySelectorAll(".gallery-item");
